@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mini Compiler IDE</title>
+
+  <link rel="stylesheet" href="./output.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Small editor/terminal feel */
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+
+<body class="min-h-screen bg-slate-950 text-slate-100">
+  <div class="max-w-6xl p-4 mx-auto md:p-6">
+    <header class="flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
+      <div>
+        <h1 class="text-2xl font-semibold tracking-tight md:text-3xl">Mini Compiler Web IDE</h1>
+        <p class="text-sm text-slate-300">Tokens • Symbol Table • Three Address Code (TAC)</p>
+      </div>
+
+      <div class="flex gap-4">
+        <button id="loadSampleBtn"
+          class="px-4 py-2 text-sm border rounded-lg bg-slate-800 hover:bg-slate-700 border-slate-700">
+          Load Sample
+        </button>
+        <button id="runBtn"
+          class="px-4 py-2 text-sm font-medium bg-orange-600 border-2 border-transparent rounded-lg hover:bg-slate-800/60 hover:border-orange-600">
+          Run Compiler
+        </button>
+      </div>
+    </header>
+
+    <main class="grid grid-cols-1 gap-4 mt-4 lg:grid-cols-2">
+      <!-- Editor -->
+      <section class="overflow-hidden border rounded-xl border-slate-800 bg-slate-900/40">
+        <div class="flex items-center justify-between px-4 py-2 border-b border-slate-800">
+          <div class="text-sm text-slate-300">Source Code</div>
+          <div id="status" class="text-xs text-slate-400">Idle</div>
+        </div>
+
+        <textarea id="code"
+          class="w-full h-[360px] md:h-[520px] p-4 bg-slate-950 text-slate-100 mono outline-none resize-none"
+          spellcheck="false"
+          placeholder="Type your mini-language program here..."></textarea>
+
+        <div class="px-4 py-2 text-xs border-t border-slate-800 text-slate-400">
+          Tip: Use <span class="text-slate-200 mono">int</span>, assignments, arithmetic, and <span class="text-slate-200 mono">print</span>.
+        </div>
+      </section>
+
+      <!-- Output -->
+      <section class="overflow-hidden border rounded-xl border-slate-800 bg-slate-900/40">
+        <div class="flex items-center justify-between px-4 py-2 border-b border-slate-800">
+          <div class="text-sm text-slate-300">Compiler Output</div>
+          <div class="text-xs text-slate-400 mono" id="exitInfo"></div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="flex gap-2 px-3 py-2 border-b border-slate-800 bg-slate-950/40">
+          <button class="tab px-3 py-1.5 rounded-lg text-sm border border-slate-800 hover:bg-slate-800/60"
+                  data-tab="tokens">Tokens</button>
+          <button class="tab px-3 py-1.5 rounded-lg text-sm border border-slate-800 hover:bg-slate-800/60"
+                  data-tab="symbols">Symbol Table</button>
+          <button class="tab px-3 py-1.5 rounded-lg text-sm border border-slate-800 hover:bg-slate-800/60"
+                  data-tab="tac">TAC</button>
+          <button class="tab px-3 py-1.5 rounded-lg text-sm border border-slate-800 hover:bg-slate-800/60"
+                  data-tab="raw">Raw</button>
+        </div>
+
+        <!-- Panels -->
+        <div class="p-3">
+          <pre id="panel-tokens" class="panel mono text-sm leading-relaxed whitespace-pre-wrap bg-slate-950 rounded-lg p-3 border border-slate-800 h-[360px] md:h-[520px] overflow-auto"></pre>
+          <pre id="panel-symbols" class="panel mono text-sm leading-relaxed whitespace-pre-wrap bg-slate-950 rounded-lg p-3 border border-slate-800 h-[360px] md:h-[520px] overflow-auto hidden"></pre>
+          <pre id="panel-tac"    class="panel mono text-sm leading-relaxed whitespace-pre-wrap bg-slate-950 rounded-lg p-3 border border-slate-800 h-[360px] md:h-[520px] overflow-auto hidden"></pre>
+          <pre id="panel-raw"    class="panel mono text-sm leading-relaxed whitespace-pre-wrap bg-slate-950 rounded-lg p-3 border border-slate-800 h-[360px] md:h-[520px] overflow-auto hidden"></pre>
+        </div>
+
+        <div class="px-4 py-2 text-xs border-t border-slate-800 text-slate-400">
+          Errors appear in the Raw tab (stderr).
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
